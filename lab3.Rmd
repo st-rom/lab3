@@ -1,0 +1,106 @@
+---
+title: "R Notebook"
+output:
+  html_document: default
+  html_notebook: default
+  pdf_document: default
+---
+#Made by Roman Stepaniuk
+
+
+   
+Task 01
+   
+```{r}
+id_num = 34
+set.seed(id_num)
+theta <- id_num/10
+lambda <- 1/theta
+m <- 1000
+n <- 10
+
+x <-matrix(rexp(n*m, rate = lambda), nrow = n)
+
+sample_mean <- colMeans(x)
+
+print('First method:')
+for (alpha in c(0.1, 0.05, 0.01)){
+  #AB <- cbind(A=c(qchisq(alpha/2, 2*n)), B=c(qchisq(1 - (alpha/2), 2*n)))
+  #AB <- c(qchisq(alpha/2, 2*n),qchisq(1 - (alpha/2), 2*n))
+  AB <- c(qchisq(alpha/2, 2*n)/(2*lambda*n),qchisq(1 - (alpha/2), 2*n)/(2*lambda*n))
+  print('Length')
+  print(AB[2]-AB[1])
+  k = 0
+  for(i in sample_mean){
+    if(AB[1] <= i & i <= AB[2]){
+      k = k + 1
+    }
+  }
+  print(k/1000)
+  
+}
+print('Second method:')
+mu <- theta
+v <- theta*theta/n
+z <- sqrt(n)*(sample_mean - theta)/theta
+
+for(alpha in c(0.1, 0.05, 0.01)){
+  k = 0
+  for(j in abs(z)){
+    if(j <= qnorm(1 - (alpha/2))){
+      k = k + 1
+    }
+  }
+  print('Length')
+  print(max(qnorm(1-(alpha/2))*theta/sqrt(n)))
+  print(k/1000)
+  
+}
+print("Third method: ")
+mu = 1/lambda
+sample_sd <- apply(x, 2, sd)
+
+for (alpha in c(0.1, 0.05, 0.01)){
+  cat(alpha, ": ", sum(abs(sample_mean - mu) < qt(1 - (alpha/2), n-1)*sample_sd/sqrt(n))/m,"\n",sep="")
+}
+
+```
+
+Task 02
+   
+```{r}
+theta <- id_num/10
+lambda <- 1/theta
+m <- 1000
+n <- 10
+
+x <-matrix(rpois(n*m, lambda = 1/lambda), nrow = n)
+
+sample_mean <- colMeans(x)
+print('First method:')
+mu <- theta
+v <- theta*theta/n
+z <- sqrt(n)*(sample_mean - theta)/sqrt(theta)
+
+for(alpha in c(0.1, 0.05, 0.01)){
+  k = 0
+  for(j in abs(z)){
+    if(j <= qnorm(1 - (alpha/2))){
+      k = k + 1
+    }
+  }
+  print('Length')
+  print(max(qnorm(1-(alpha/2))*theta/sqrt(n)))
+  print(k/1000)
+  
+}
+
+print("Second method: ")
+mu = lambda
+sample_sd <- sqrt(lambda)
+
+for (alpha in c(0.1, 0.05, 0.01)){
+  cat(alpha, ": ", sum(abs(sample_mean - mu) < qt(1 - (alpha/2), n-1)*sample_sd/sqrt(n))/m,"\n",sep="")
+}
+```
+   
