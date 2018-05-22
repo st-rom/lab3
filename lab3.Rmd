@@ -62,6 +62,9 @@ sample_sd <- apply(x, 2, sd)
 
 for (alpha in c(0.1, 0.05, 0.01)){
   cat(alpha, ": ", sum(abs(sample_mean - mu) < qt(1 - (alpha/2), n-1)*sample_sd/sqrt(n))/m,"\n",sep="")
+  len = max(qt(1-alpha/2, n-1)*sample_sd/sqrt(n))*2
+  print('Length')
+  print(len)
 }
 
 ```
@@ -97,10 +100,13 @@ for(alpha in c(0.1, 0.05, 0.01)){
 
 print("Second method: ")
 mu = lambda
-sample_sd <- sqrt(lambda)
+sample_sd <- apply(x, 2, sd)
 
 for (alpha in c(0.1, 0.05, 0.01)){
   cat(alpha, ": ", sum(abs(sample_mean - mu) < qt(1 - (alpha/2), n-1)*sample_sd/sqrt(n))/m,"\n",sep="")
+  len = max(qt(1-alpha/2, n-1)*sample_sd/sqrt(n))*2
+  print('Length')
+  print(len)
 }
 ```
    
