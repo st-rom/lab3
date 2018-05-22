@@ -25,8 +25,6 @@ sample_mean <- colMeans(x)
 
 print('First method:')
 for (alpha in c(0.1, 0.05, 0.01)){
-  #AB <- cbind(A=c(qchisq(alpha/2, 2*n)), B=c(qchisq(1 - (alpha/2), 2*n)))
-  #AB <- c(qchisq(alpha/2, 2*n),qchisq(1 - (alpha/2), 2*n))
   AB <- c(qchisq(alpha/2, 2*n)/(2*lambda*n),qchisq(1 - (alpha/2), 2*n)/(2*lambda*n))
   print('Length')
   print(AB[2]-AB[1])
@@ -57,7 +55,7 @@ for(alpha in c(0.1, 0.05, 0.01)){
   
 }
 print("Third method: ")
-sample_sd = 1/lambda
+sample_sd <- apply(x, 2, sd)
 
 for (alpha in c(0.1, 0.05, 0.01)){
   cat(alpha, ": ", sum(abs(sample_mean - mu) < qt(1 - (alpha/2), n-1)*sample_sd/sqrt(n))/m,"\n",sep="")
@@ -98,7 +96,7 @@ for(alpha in c(0.1, 0.05, 0.01)){
 }
 
 print("Second method: ")
-sample_sd = sqrt(lambda)
+sample_sd <- apply(x, 2, sd)
 
 for (alpha in c(0.1, 0.05, 0.01)){
   cat(alpha, ": ", sum(abs(sample_mean - mu) < qt(1 - (alpha/2), n-1)*sample_sd/sqrt(n))/m,"\n",sep="")
